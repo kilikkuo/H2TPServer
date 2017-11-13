@@ -15,7 +15,7 @@ var gEMETests = [
     keys: {
       // "keyid" : "key"
       "7e571d037e571d037e571d037e571d03" : "7e5733337e5733337e5733337e573333",
-      // "7e571d047e571d047e571d047e571d04" : "7e5744447e5744447e5744447e574444",
+      "7e571d047e571d047e571d047e571d04" : "7e5744447e5744447e5744447e574444",
     },
     sessionType:"temporary",
     sessionCount:1,

@@ -49,7 +49,7 @@ function startTest(test, token)
       /* load() is invoked when going to YT homepage by click YT logo.
        * Simulating the scenario here.
        */
-      // v.load();
+      v.load();
       v.setMediaKeys(null)
       .then(() => {
         console.log(" v.setMediaKeys OK !!, try to play clear content");
