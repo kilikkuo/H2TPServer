@@ -7,6 +7,7 @@
   <script type="text/javascript" src="eme.js"></script>
 </head>
 <body>
+<video name='v' id='video'>
 <pre id="test">
 <script class="testbody" type="text/javascript">
 
@@ -17,8 +18,7 @@ function startTest(test, token)
     sessions.push(session);
   }
 
-  let v = document.createElement("video");
-  document.body.appendChild(v);
+  let v = document.getElementById("video");
 
   var gotEncrypted = 0;
   let finish = new EMEPromise;
