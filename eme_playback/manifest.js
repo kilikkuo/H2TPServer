@@ -8,7 +8,7 @@ var gEMETests = [
         type:"video/mp4; codecs=\"avc1.64000d\"",
         fragments:[ "bipbop-cenc-videoinit.mp4",
                     "bipbop-cenc-video1.m4s",
-                    // "bipbop-cenc-video2.m4s",
+                    "bipbop-cenc-video2.m4s",
                   ]
       }
     ],

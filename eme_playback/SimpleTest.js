@@ -26,9 +26,12 @@ var isSingleTestRun = (parent == window && !opener)
 try {
   var isPrimaryTestWindow = !!parent.TestRunner || isSingleTestRun;
 } catch(e) {
-  dump("TEST-UNEXPECTED-FAIL, Exception caught: " + e.message +
-                ", at: " + e.fileName + " (" + e.lineNumber +
-                "), location: " + window.location.href + "\n");
+//   dump("TEST-UNEXPECTED-FAIL, Exception caught: " + e.message +
+//                 ", at: " + e.fileName + " (" + e.lineNumber +
+//                 "), location: " + window.location.href + "\n");
+  console.log("TEST-UNEXPECTED-FAIL, Exception caught: " + e.message +
+  ", at: " + e.fileName + " (" + e.lineNumber +
+  "), location: " + window.location.href + "\n");
 }
 // Finds the TestRunner for this test run and the SpecialPowers object (in
 // case it is not defined) from a parent/opener window.
@@ -428,7 +431,8 @@ SimpleTest._logResult = function (test, passInfo, failInfo, stack) {
     } else if (typeof dump === "function") {
         var diagMessage = test.name + (test.diag ? " - " + test.diag : "");
         var debugMsg = [result.message, url, diagMessage].join(' | ');
-        dump(debugMsg + "\n");
+        console.log(debugMsg + "\n");
+        // dump(debugMsg + "\n");
     } else {
         // Non-Mozilla browser?  Just do nothing.
     }
@@ -439,7 +443,8 @@ SimpleTest.info = function(name, message) {
     if (parentRunner) {
         parentRunner.structuredLogger.info(log);
     } else {
-        dump(log + '\n');
+        console.log(log + "\n");
+        // dump(log + '\n');
     }
 };
 
@@ -777,7 +782,8 @@ SimpleTest.finish = function() {
         if (parentRunner) {
             parentRunner.structuredLogger.error(err);
         } else {
-            dump(err + '\n');
+            // dump(err + '\n');
+            console.log(err + '\n');
         }
     }
 
