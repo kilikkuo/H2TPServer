@@ -11,6 +11,26 @@
 <pre id="test">
 <script class="testbody" type="text/javascript">
 
+var EMEmanifest = [
+  {
+    name:"bipbop 10s",
+    tracks: [
+      {
+          name:"video",
+          type:"video/mp4; codecs=\"avc1.4d4015\"",
+          fragments:[ "bipbop-cenc-video-10s.mp4",
+                    ]
+      }
+    ],
+    keys: {
+      "7e571d037e571d037e571d037e571d11" : "7e5733337e5733337e5733337e573311",
+    },
+    sessionType:"temporary",
+    sessionCount:1,
+    duration:10.01
+  },
+];
+
 function startTest(test, token)
 {
   var sessions = [];
@@ -48,7 +68,7 @@ function startTest(test, token)
   })
   .catch(reason => ok(false, reason))
 }
-startTest(gEMETests[0], 'test>>>>');
+startTest(EMEmanifest[0], 'test>>>>');
 </script>
 </pre>
 </body>
