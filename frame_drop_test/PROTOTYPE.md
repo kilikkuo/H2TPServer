@@ -78,7 +78,8 @@ Two ways
 Note on design choices
 ----------------
 
-Since I'm not familiar with designing web service
+To make the HTTP API call asynchronous as possible as I can. So I did not
+design any API which can get result back directly.
 
 
 API
@@ -86,7 +87,10 @@ API
 
 The API is currently designed as a POST request with raw JSON body.
 The information of actual action is encapsulated in the JSON object.
+
 e.g. 
+
+`````` javascript
   POST /api/v1 HTTP/1.1
   Host: localhost:5000
   Content-Type: application/json
@@ -94,13 +98,28 @@ e.g.
   Postman-Token: 9813c379-c29d-e923-da16-d0c203427762
 
   {"token":"78ui","task": {"action":"respond_inquiry","data":{"id":1, "answer":" OK", "closed":true}}}
+``````
+
+  "token"  : the identifier for user.
+  "action" : the task which client wants to execute.
+  "data"   : required parameters which can be stored by web page. The web page got
+             the result of previous action via websocket notification.
 
 Everyone:
 
- <!-- * Get customer (includes list of related document and transfer IDs)
- * Get document
- * Get transfer
+ * To get customer:
+    "action" : "get_customer"
+    "data" : { "id" : The id field in table customer }
+  
+ * To get document:
+    "action" : "get_document"
+    "data" : { "id" : The id field in table document }
 
+ * To get transfer:
+    "action" : "get_transfer"
+    "data" : { "id" : The id field in table transfer }
+
+<!-- 
 Admin:
 
  * Create customer
@@ -117,5 +136,4 @@ Tasks:
 
  * Get a task (suitable for my user role and level)
  * Complete current task
- * Escalate current task
-  -->
+ * Escalate current task -->
