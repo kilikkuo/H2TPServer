@@ -113,7 +113,7 @@ import requests
 r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"action":"login","name":"Alice"}})
 print(r.status_code)
 # Get transfer (id=3)
-r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"token":"12qw","task": {"action":"get_transfer", "data": {"id":3}}})
+r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"action":"get_transfer", "data": {"id":3}}})
 print(r.status_code)
 ```
 
