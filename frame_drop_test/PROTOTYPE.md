@@ -86,6 +86,7 @@ API
 ---
 
 The API is currently designed as a POST request with raw JSON body.
+
 The information of actual action is encapsulated in the JSON object.
 
 e.g.
@@ -99,33 +100,56 @@ e.g.
   {"token":"78ui","task": {"action":"respond_inquiry","data":{"id":1, "answer":" OK", "closed":true}}}
 ```
 
-  "token"  : the identifier for user.
-  "action" : the task which client wants to execute.
-  "data"   : required parameters which can be stored by web page. The web page got
-             the result of previous action via websocket notification.
+  - "token"  : the identifier for user.
+  - "task"   : the required parameter for this task which client wants to execute.
+  - "action" : the action that this task will perform.
+  - "data"   : required parameters for this action. These parameters may be obtained from the result of previous action and shall be stored by the web page.
 
 Everyone:
 
  * To get customer:
+  
     "action" : "get_customer"
-    "data" : { "id" : The id field in table customer }
+
+    "data"   : {"id" : The id field in table customer}
   
  * To get document:
+
     "action" : "get_document"
-    "data" : { "id" : The id field in table document }
+
+    "data"   : {"id" : The id field in table document}
 
  * To get transfer:
-    "action" : "get_transfer"
-    "data" : { "id" : The id field in table transfer }
 
-<!-- 
+    "action" : "get_transfer"
+
+    "data"   : {"id" : The id field in table transfer}
+
+
 Admin:
 
- * Create customer
- * Create document (and review task)
- * Create transfer (and review task)
- * Create customer inquiry task
+ * To create customer:
 
+    "action" : "create_customer"
+
+    "data"   : {"name": The customer's name}
+
+ * To create document:
+
+    "action" : "create_document"
+
+    "data"   : {"cid"    : The customer_id which references to customer(id),
+                "content": The content of this document}
+
+ * To create transfer:
+
+    "action" : "create_transfer"
+
+    "data"   : {"cid"    : The customer_id which references to customer(id),
+                "amount" : The amount of money}
+
+ * Create customer inquiry task
+<!-- 
 Compliance:
 
  * Approve/reject document
