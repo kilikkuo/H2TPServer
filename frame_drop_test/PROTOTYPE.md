@@ -105,35 +105,47 @@ e.g.
   - "action" : the action that this task will perform.
   - "data"   : required parameters for this action. These parameters may be obtained from the result of previous action and shall be stored by the web page.
 
-Everyone:
+Try example APIs by python script as follows,
+e.g. 
+```
+import requests
+# Need to log in first
+r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"action":"login","name":"Alice"}})
+print(r.status_code)
+# Get transfer (id=3)
+r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"token":"12qw","task": {"action":"get_transfer", "data": {"id":3}}})
+print(r.status_code)
+```
 
- * **To get customer**:
+**Everyone**:
+
+ * To get customer:
   ```
     "action" : "get_customer"
     "data"   : {"id" : The id field in table customer}
   ```
 
- * **To get document**:
+ * To get document:
 ```
     "action" : "get_document"
     "data"   : {"id" : The id field in table document}
 ```
 
- * **To get transfer**:
+ * **To get transfer:
 ```
     "action" : "get_transfer"
     "data"   : {"id" : The id field in table transfer}
 ```
 
-Admin:
+**Admin**:
 
- * **To create customer**:
+ * To create customer:
 ```
     "action" : "create_customer"
     "data"   : {"name": The customer's name}
 ```
 
- * **To create document**:
+ * To create document:
 ```
     "action" : "create_document"
     "data"   : {"cid"    : The customer_id which references to customer(id),
@@ -141,7 +153,7 @@ Admin:
                 "level"(optional) : The required level to review this document}
 ```
 
- * **To create transfer**:
+ * To create transfer:
 ```
     "action" : "create_transfer"
     "data"   : {"cid"    : The customer_id which references to customer(id),
@@ -149,7 +161,7 @@ Admin:
                 "level"(optional) : The required level to review this transfer}
 ```
 
- * **To create customer inquiry**:
+ * To create customer inquiry:
 ```
     "action" : "create_inquiry"
     "data"   : {"cid"     : The customer_id which references to customer(id),
@@ -158,32 +170,32 @@ Admin:
 ```
 
 
-Compliance:
+**Compliance**:
 
- * **To approve/reject document**:
+ * To approve/reject document:
 ```
     "action" : "review_document"
     "data"   : {"id"       : The id of this document,
                 "approved" : The approval status}
 ```
 
- * **To approve/reject transfer**:
+ * To approve/reject transfer:
 ```
     "action" : "review_transfer"
     "data"   : {"id"       : The id of this transfer,
                 "approved" : The approval status}
 ```
 
-Tasks:
+**Tasks**:
 
- * **To get a task(suitable for my role and level)**:
+ * To get a task(suitable for my role and level):
 ```
     "action" : "get_task"
     "data"   : {"id"     : The id of document/transfer/inquiry,
                 "type"   : One of the three types, document, transfer or inquiry}
 ```
 
- * **To respond inquiry**:
+ * To respond inquiry:
 ```
     "action" : "respond_inquiry"
     "data"   : {"id"       : The id of this inquiry,
@@ -191,7 +203,7 @@ Tasks:
                 "closed"   : The status of this inquiry}
 ```
 
- * **To escalate current task(document/transfer/inquiry)**:
+ * To escalate current task(document/transfer/inquiry):
 ```
     "action" : "escalate_task"
     "data"   : {"id"     : The id of document/transfer/inquiry,
