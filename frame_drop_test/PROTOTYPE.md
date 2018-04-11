@@ -1,7 +1,7 @@
 Prototype: Backoffice Task Manager
 ==================================
 
-Files Overview
+Overview
 --------
 
 task.py:
@@ -24,79 +24,80 @@ taskcenter.py:
 
 user.py:
 
- * Define pratical behaviors for different roles.
- * 
+ * Define behaviors which are permitted for different roles {Admin,Compliance,Service}.
+ * Each role needs to prepare the sql statment for its operation.
+ * Each role is responsible for invoking a specific event to task when the
+   operation is done.
 
 usercenter.py:
 
- * Create Admin/Compliance/Service user according to the data loaded into memory.
- * Responsible of identifyinig whether the user is authenticated or not.
+ * Create existing Admin/Compliance/Service users according to the data loaded
+   from database.
+ * Responsible for identifyinig whether the user is authenticated or not.
 
-InfoCenter:
+dbtask.py:
+ 
+ * Define task classes which are the actual places that execute sql statement
+   through psycopg2 module.
 
- * Connect to database and load data into memory.
- * Prepare DB task which is supposed to performs the sql statement
- * Manage current pending reviews/inquiries in memory
+infocenter.py:
+
+ * Connect to database and trigger task to load data into memory.
+ * Prepare DB task which is supposed to perform the sql statement.
+ * Manage current pending reviews/inquiries in memory.
 
 
-API
+Generate sample data
 ------------
 
-The prototype will be an application server that exposes a
-JSON-over-HTTP API (perhaps REST, but not necessarily). No web
-interface is necessary. In addition, there should be:
+Fake database and initial fake data will be created when the server is up by
+calling |create_fake_database| in ./tests/fakedata.py. Old database will be dropped
+and a new one is created.
 
- * A database schema (for Postgres)
- * A way to generate sample data (e.g. a script calling the admin APIs)
+To generate sample data via Admin API. After server is up, try calling
+|create_samples_v1| in ./tests/create_data_by_adminapi.py
+
+
+How to test
+------------
+
+Two ways 
+1. Send http request by Postman (a chrome extension). I've generated some
+   sample requests and published here[1]. (will be expired in 7 days.)
+[1] https://documenter.getpostman.com/view/4096234/emq/RVu7D7xc
+
+2. Test the same requests by executing ./tests/test_script.py 
+
+
+ <!-- * A way to generate sample data (e.g. a script calling the admin APIs)
  * A functional test suite (which calls the APIs)
  * Simple API docs (sample calls)
- * Notes on design choices
-
-The server can be written in Erlang (Cowboy) or Python (Flask). If
-you're not familiar with either, let me know what you're comfortable
-with (but please not Rails or Node!).
+ * Notes on design choices -->
 
 
-Mock Application
+Note on design choices
 ----------------
 
-An SQL schema is provided separately which creates mock tables for
-users, roles, customers, documents, and transfers. You may extend them
-if you wish, and/or create new tables for the task manager.
-
-"Users" are EMQ backoffice staff. Their roles are defined in the
-`user_role` table as (`role_name`, `level`), where `role_name` is
-"admin", "service" (CSRs) or "compliance" (AML check staff). Their
-`level` is used for task escalation: If a level 1 user escalates a
-task, it should go to a user of at least level 2, and so on.
-
-There are three types of task:
-
- * Review a document (compliance role)
- * Review a transfer (compliance role)
- * Respond to a customer inquiry (service role)
-
-Every document and transfer must be reviewed. Customer inquiries are
-on-demand.
-
-Note that in the real system there are many more types of task, and
-the design should plan for this.
-
-When a user receives a task, they can:
-
- * Complete it (after taking some actions), or
- * Escalate it (to a higher level of the same role)
+Since I'm not familiar with designing web service
 
 
 API
 ---
 
-Each user role (admin, compliance, service) has access to different
-APIs. The mock application APIs are:
+The API is currently designed as a POST request with raw JSON body.
+The information of actual action is encapsulated in the JSON object.
+e.g. 
+  POST /api/v1 HTTP/1.1
+  Host: localhost:5000
+  Content-Type: application/json
+  Cache-Control: no-cache
+  Postman-Token: 9813c379-c29d-e923-da16-d0c203427762
+
+  {"token":"78ui","task": {"action":"respond_inquiry","data":{"id":1, "answer":" OK", "closed":true}}}
 
 Everyone:
 
- * Get customer (includes list of related document and transfer IDs)
+ <!-- * Get customer (includes list of related document and transfer IDs)
  * Get document
  * Get transfer
 
@@ -117,20 +118,4 @@ Tasks:
  * Get a task (suitable for my user role and level)
  * Complete current task
  * Escalate current task
- 
-
-Access Control
---------------
-
-Authentication isn't part of the prototype so there is no login
-process. API calls should include an `X-EMQ-User` header containing a
-username, and access control should be based on that.
-
-Access rules are:
-
- * `admin` users can call any API at any time
- * `compliance` and `service` users can only view (or change) data
-   related to their current task
-
-
-
+  -->
