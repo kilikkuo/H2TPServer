@@ -183,6 +183,14 @@ Tasks:
                 "type"   : One of the three types, document, transfer or inquiry}
 ```
 
+ * **To respond inquiry**:
+```
+    "action" : "respond_inquiry"
+    "data"   : {"id"       : The id of this inquiry,
+                "answer"   : The answer to the problem,
+                "closed"   : The status of this inquiry}
+```
+
  * **To escalate current task(document/transfer/inquiry)**:
 ```
     "action" : "escalate_task"
