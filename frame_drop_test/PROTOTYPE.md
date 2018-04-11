@@ -108,16 +108,16 @@ e.g.
 Everyone:
 
  * To get customer:
-  
+  ```
     "action" : "get_customer"
-
     "data"   : {"id" : The id field in table customer}
-  
+  ```
+
  * To get document:
-
+```
     "action" : "get_document"
-
     "data"   : {"id" : The id field in table document}
+```
 
  * To get transfer:
 
