@@ -88,9 +88,8 @@ API
 The API is currently designed as a POST request with raw JSON body.
 The information of actual action is encapsulated in the JSON object.
 
-e.g. 
-
-`````` javascript
+e.g.
+```
   POST /api/v1 HTTP/1.1
   Host: localhost:5000
   Content-Type: application/json
@@ -98,7 +97,7 @@ e.g.
   Postman-Token: 9813c379-c29d-e923-da16-d0c203427762
 
   {"token":"78ui","task": {"action":"respond_inquiry","data":{"id":1, "answer":" OK", "closed":true}}}
-``````
+```
 
   "token"  : the identifier for user.
   "action" : the task which client wants to execute.
