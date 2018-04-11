@@ -120,43 +120,73 @@ Everyone:
 ```
 
  * **To get transfer**:
-
+```
     "action" : "get_transfer"
-
     "data"   : {"id" : The id field in table transfer}
-
+```
 
 Admin:
 
- * To create customer:
-
+ * **To create customer**:
+```
     "action" : "create_customer"
-
     "data"   : {"name": The customer's name}
+```
 
- * To create document:
-
+ * **To create document**:
+```
     "action" : "create_document"
-
     "data"   : {"cid"    : The customer_id which references to customer(id),
-                "content": The content of this document}
+                "content": The content of this document,
+                "level"(optional) : The required level to review this document}
+```
 
- * To create transfer:
-
+ * **To create transfer**:
+```
     "action" : "create_transfer"
-
     "data"   : {"cid"    : The customer_id which references to customer(id),
-                "amount" : The amount of money}
+                "amount" : The amount of money,
+                "level"(optional) : The required level to review this transfer}
+```
 
- * Create customer inquiry task
-<!-- 
+ * **To create customer inquiry**:
+```
+    "action" : "create_inquiry"
+    "data"   : {"cid"     : The customer_id which references to customer(id),
+                "problem" : The problem description which client has stated,
+                "level"(optional) : The required level to resolve this inquiry}
+```
+
+
 Compliance:
 
- * Approve/reject document
- * Approve/reject transfer
+ * **To approve/reject document**:
+```
+    "action" : "review_document"
+    "data"   : {"id"       : The id of this document,
+                "approved" : The approval status}
+```
+
+ * **To approve/reject transfer**:
+```
+    "action" : "review_transfer"
+    "data"   : {"id"       : The id of this transfer,
+                "approved" : The approval status}
+```
 
 Tasks:
 
- * Get a task (suitable for my user role and level)
- * Complete current task
- * Escalate current task -->
+ * **To get a task(suitable for my role and level)**:
+```
+    "action" : "get_task"
+    "data"   : {"id"     : The id of document/transfer/inquiry,
+                "type"   : One of the three types, document, transfer or inquiry}
+```
+
+ * **To escalate current task(document/transfer/inquiry)**:
+```
+    "action" : "escalate_task"
+    "data"   : {"id"     : The id of document/transfer/inquiry,
+                "type"   : One of the three types, document, transfer or inquiry,
+                "level"  : The required level for resolving this task}
+```
