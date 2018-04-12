@@ -87,23 +87,26 @@ asynchronously and can be configured by each Admin/Compliance/Service.
 Because normally the sql operation is already performed on taskcenter's
 worker thread.
 
-There shall be 2 parts of testing. 
+There will be two parts for testing.
 
 1. system-wide test : a bunch of tasks will be executed in a sequnce and the
-   task result log will be dumpped and compared to a validation file.
+   task result log will be dumpped and compared to a validation file. This is
+   used to check if the system works as expectation.
 
 2. module-wide test : prepare sample test data for each component, i.e. infoCenter,
-   taskCenter, userCenter.
+   taskCenter, userCenter. This is used to check each module works fine.
 
 
 How to run test
 ------------
 
-To test system widely(two ways):
+**System-wide test (two ways)**:
 
 1. Send http request by Postman (a chrome extension). Then check the log and make
    you eye bleed. I've generated some sample requests and published here[1].
+
    (will be expired in 7 days.)
+
    [1] https://documenter.getpostman.com/view/4096234/emq/RVu7D7xc
 
 2. Run a pre-defined sequence scripts to test the system & validate the results.
@@ -119,7 +122,7 @@ $> python ./app.py True
 $> python ./tests/test_script.py
 ```
 
-To test module-wide:
+**Module-wide test**:
 
  * Not implemented yet.
 
@@ -151,11 +154,12 @@ The json object must contain the following 4 keys and corresponding values.
 
 Try example APIs by python script as follows,
 e.g. 
-```
+``` python
 import requests
 # Need to log in first
 r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"action":"login","name":"Alice"}})
 print(r.status_code)
+
 # Get transfer (id=3)
 r = requests.post('http://localhost:5000/api/v1', json={"token":"12qw","task": {"action":"get_transfer", "data": {"id":3}}})
 print(r.status_code)
@@ -164,19 +168,19 @@ print(r.status_code)
 **Everyone**:
 
  * To get customer:
-  ```
+  ``` json
     "action" : "get_customer"
     "data"   : {"id" : The id field in table customer}
   ```
 
  * To get document:
-```
+``` json
     "action" : "get_document"
     "data"   : {"id" : The id field in table document}
 ```
 
  * **To get transfer:
-```
+``` json
     "action" : "get_transfer"
     "data"   : {"id" : The id field in table transfer}
 ```
@@ -184,13 +188,13 @@ print(r.status_code)
 **Admin**:
 
  * To create customer:
-```
+``` json
     "action" : "create_customer"
     "data"   : {"name": The customer's name}
 ```
 
  * To create document:
-```
+``` json
     "action" : "create_document"
     "data"   : {"cid"    : The customer_id which references to customer(id),
                 "content": The content of this document,
@@ -198,7 +202,7 @@ print(r.status_code)
 ```
 
  * To create transfer:
-```
+``` json
     "action" : "create_transfer"
     "data"   : {"cid"    : The customer_id which references to customer(id),
                 "amount" : The amount of money,
@@ -206,7 +210,7 @@ print(r.status_code)
 ```
 
  * To create customer inquiry:
-```
+``` json
     "action" : "create_inquiry"
     "data"   : {"cid"     : The customer_id which references to customer(id),
                 "problem" : The problem description which client has stated,
@@ -217,14 +221,14 @@ print(r.status_code)
 **Compliance**:
 
  * To approve/reject document:
-```
+``` json
     "action" : "review_document"
     "data"   : {"id"       : The id of this document,
                 "approved" : The approval status}
 ```
 
  * To approve/reject transfer:
-```
+``` json
     "action" : "review_transfer"
     "data"   : {"id"       : The id of this transfer,
                 "approved" : The approval status}
@@ -233,14 +237,14 @@ print(r.status_code)
 **Tasks**:
 
  * To get a task(suitable for my role and level):
-```
+``` json
     "action" : "get_task"
     "data"   : {"id"     : The id of document/transfer/inquiry,
                 "type"   : One of the three types, document, transfer or inquiry}
 ```
 
  * To respond inquiry:
-```
+``` json
     "action" : "respond_inquiry"
     "data"   : {"id"       : The id of this inquiry,
                 "answer"   : The answer to the problem,
@@ -248,7 +252,7 @@ print(r.status_code)
 ```
 
  * To escalate current task(document/transfer/inquiry):
-```
+``` json
     "action" : "escalate_task"
     "data"   : {"id"     : The id of document/transfer/inquiry,
                 "type"   : One of the three types, document, transfer or inquiry,
