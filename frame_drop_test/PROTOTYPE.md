@@ -115,9 +115,7 @@ How to run test
 ```
 $> python ./app.py True
 ```
-   
-   Then run the script, task result log will be dumpped and be compared to 
-   test_validation.txt
+   Then run the script, task result log will be dumpped and be compared to test_validation.txt
 ```
 $> python ./tests/test_script.py
 ```
