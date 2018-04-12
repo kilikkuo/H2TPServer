@@ -47,6 +47,10 @@ infocenter.py:
  * Manage current pending reviews/inquiries in memory.
 
 
+error.py
+
+ * Define the error code & translated message.
+
 Generate sample data
 ------------
 
@@ -58,28 +62,66 @@ To generate sample data via Admin API. After server is up, try calling
 |create_samples_v1| in ./tests/create_data_by_adminapi.py
 
 
-How to test
-------------
-
-Two ways 
-1. Send http request by Postman (a chrome extension). I've generated some
-   sample requests and published here[1]. (will be expired in 7 days.)
-[1] https://documenter.getpostman.com/view/4096234/emq/RVu7D7xc
-
-2. Test the same requests by executing ./tests/test_script.py 
-
-
- <!-- * A way to generate sample data (e.g. a script calling the admin APIs)
- * A functional test suite (which calls the APIs)
- * Simple API docs (sample calls)
- * Notes on design choices -->
-
-
 Note on design choices
 ----------------
 
-To make the HTTP API call asynchronous as possible as I can. So I did not
-design any API which can get result back directly.
+I want to make the HTTP API call respond as soon as possible. So I did not
+design any API which will get huge result back directly. An asynchronous task
+will be generated and executed in worker thread once an API call hits the server.
+
+The result of each task shall be sent to client via websocket for display, but 
+this is not implemented yet.
+
+New type of task could be easily implemented by providing a new class which is
+derived from task.BasicTask. Also a new method with sql operation should be
+implemented in corresponding operator (user) to fulfill this functionality.
+
+General-purpose task/taskthread helper classes are introduced to build background
+workers for each center who needs to do thing asynchronously.
+
+The Eventloop/EventHandler helper classes are introduced to loose the relationship
+among these centers, so that all operations could be event-driven.
+
+InfoCenter's API |exec_db_task| is able to be executed synchronously or 
+asynchronously and can be configured by each Admin/Compliance/Service.
+Because normally the sql operation is already performed on taskcenter's
+worker thread.
+
+There shall be 2 parts of testing. 
+
+1. system-wide test : a bunch of tasks will be executed in a sequnce and the
+   task result log will be dumpped and compared to a validation file.
+
+2. module-wide test : prepare sample test data for each component, i.e. infoCenter,
+   taskCenter, userCenter.
+
+
+How to run test
+------------
+
+To test system widely(two ways):
+
+1. Send http request by Postman (a chrome extension). Then check the log and make
+   you eye bleed. I've generated some sample requests and published here[1].
+   (will be expired in 7 days.)
+   [1] https://documenter.getpostman.com/view/4096234/emq/RVu7D7xc
+
+2. Run a pre-defined sequence scripts to test the system & validate the results.
+
+   Start the server with test-mode enabled
+```
+$> python ./app.py True
+```
+   
+   Then run the script, task result log will be dumpped and be compared to 
+   test_validation.txt
+```
+$> python ./tests/test_script.py
+```
+
+To test module-wide:
+
+ * Not implemented yet.
 
 
 API
@@ -99,6 +141,8 @@ e.g.
 
   {"token":"78ui","task": {"action":"respond_inquiry","data":{"id":1, "answer":" OK", "closed":true}}}
 ```
+
+The json object must contain the following 4 keys and corresponding values.
 
   - "token"  : the identifier for user.
   - "task"   : the required parameter for this task which client wants to execute.
