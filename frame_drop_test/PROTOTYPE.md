@@ -4,6 +4,16 @@ Prototype: Backoffice Task Manager
 Overview
 --------
 
+An API hits the server and a task will be created to run in backgourd worker.
+The task contains a user who is qualified to perform this task and parameters
+which will be used in the following sql operation. The result of db operation
+will be sent back to where the task was created and be notified to client through
+websocket if needed.
+
+
+File description
+--------
+
 task.py:
 
  * Handling a HTTP request is treated as executing a task and the task is created
@@ -54,13 +64,15 @@ error.py
 Generate sample data
 ------------
 
-Fake database and initial fake data will be created when the server is up by
-calling |create_fake_database| in ./tests/fakedata.py. Old database will be dropped
-and a new one is created.
+Fake database and initial fake data will be created when the server is up. Old 
+database will be dropped and a new one is created. See |create_fake_database|
+in ./tests/fakedata.py. 
 
-To generate sample data via Admin API. After server is up, try calling
-|create_samples_v1| in ./tests/create_data_by_adminapi.py
-
+To generate sample data via Admin API. After server is up, run the script.
+See |create_samples_v1|.
+```
+$> python ./tests/create_data_by_adminapi.py
+```
 
 Note on design choices
 ----------------
@@ -70,7 +82,7 @@ design any API which will get huge result back directly. An asynchronous task
 will be generated and executed in worker thread once an API call hits the server.
 
 The result of each task shall be sent to client via websocket for display, but 
-this is not implemented yet.
+this is **not implemented** yet.
 
 New type of task could be easily implemented by providing a new class which is
 derived from task.BasicTask. Also a new method with sql operation should be
